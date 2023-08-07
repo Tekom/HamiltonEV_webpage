@@ -96,7 +96,7 @@ const cloud_data = {'engine_velocity':{
   'variable': graph_data_pwm,
 }}
 
-var socket = new WebSocket('ws://' + "3.145.106.231:8000" + '/ws/telemetria/');
+var socket = new WebSocket('ws://' + "https://hamiltonev.azurewebsites.net" + '/ws/telemetria/');
 
 socket.onmessage = function(e) {
     var djangoData = JSON.parse(e.data);
