@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'telemetria',
 ]
 
@@ -99,6 +100,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+CHANNEL_LAYERS = { 'default': 
+                  { 'BACKEND': 'channels_redis.core.RedisChannelLayer', 
+                    'CONFIG': { "hosts": [("rediss://hamiltonev.redis.cache.windows.net:6380/0")], 
+        },            
+    }, 
+}
 
 
 # Internationalization
