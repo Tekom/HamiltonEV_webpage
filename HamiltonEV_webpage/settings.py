@@ -32,14 +32,14 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
+    #'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
+    #'channels',
     'telemetria',
 ]
 
@@ -74,7 +74,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'HamiltonEV_webpage.wsgi.application'
-ASGI_APPLICATION = 'HamiltonEV_webpage.asgi.application'
+#ASGI_APPLICATION = 'HamiltonEV_webpage.asgi.application'
 
 
 # Database
@@ -87,14 +87,14 @@ DATABASES = {
     }
 }
 
-CHANNEL_LAYERS = { 
-    'default':{
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('3.145.106.231', 6379)],
-        }    
-    }
-}
+# CHANNEL_LAYERS = { 
+#     'default':{
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('3.145.106.231', 6379)],
+#         }    
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
