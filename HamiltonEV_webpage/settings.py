@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-16s4w=qjs*@r$!k&20fe(hs27v_a%b@%a_-a@00wtat7o70f_r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -105,13 +105,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CHANNEL_LAYERS = { 'default': 
-                  { 'BACKEND': 'channels_redis.core.RedisChannelLayer', 
-                    'CONFIG': { 
-                        "hosts": [("127.0.0.1:8888", 6379)], 
-        },            
-    }, 
-}
+# CHANNEL_LAYERS = { 'default': 
+#                   { 'BACKEND': 'channels_redis.core.RedisChannelLayer', 
+#                     'CONFIG': { 
+#                         "hosts": [("127.0.0.1:8888", 6379)], 
+#         },            
+#     }, 
+# }
 
 
 # Internationalization
@@ -132,10 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
+#STATIC_ROOT = 'static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

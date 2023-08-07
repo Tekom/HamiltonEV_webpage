@@ -16,7 +16,4 @@ from channels.auth import AuthMiddlewareStack
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HamiltonEV_webpage.settings')
 
 application = get_asgi_application()
-# ProtocolTypeRouter({
-#     'http': get_asgi_application(),
-#     'websocket': AuthMiddlewareStack(URLRouter(ws_urlpatterns)),
-# })
+

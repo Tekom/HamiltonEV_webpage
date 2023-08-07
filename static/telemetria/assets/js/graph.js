@@ -96,26 +96,56 @@ const cloud_data = {'engine_velocity':{
   'variable': graph_data_pwm,
 }}
 
-var socket = new WebSocket('ws://' + "127.0.0.1:8888" + '/ws/telemetria/');
+// var socket = new WebSocket('ws://' + "127.0.0.1:8888" + '/ws/telemetria/');
 
-socket.onmessage = function(e) {
-    var djangoData = JSON.parse(e.data);
-    var keys = Object.keys(djangoData);
+// socket.onmessage = function(e) {
+//     var djangoData = JSON.parse(e.data);
+//     var keys = Object.keys(djangoData);
     
-    for (let i = 0; i < keys.length; i++) {
-      var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
-      new_graph_data.shift();
-      new_graph_data.push(djangoData[keys[i]]);
-      cloud_data[keys[i]].variable.data.datasets[0].data = new_graph_data;
+//     for (let i = 0; i < keys.length; i++) {
+//       var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
+//       new_graph_data.shift();
+//       new_graph_data.push(djangoData[keys[i]]);
+//       cloud_data[keys[i]].variable.data.datasets[0].data = new_graph_data;
 
-      cloud_data[keys[i]].variable.options.scales.y.title.text = cloud_data[keys[i]].y_label;
-      cloud_data[keys[i]].variable.data.datasets[0].label = cloud_data[keys[i]].title;
-    }
+//       cloud_data[keys[i]].variable.options.scales.y.title.text = cloud_data[keys[i]].y_label;
+//       cloud_data[keys[i]].variable.data.datasets[0].label = cloud_data[keys[i]].title;
+//     }
 
-    engine_chart.update();
-    velocity_chart.update();
-    voltage_chart.update();
-    current_chart.update();
-    imu_chart.update();
-    pwm_chart.update();
+//     engine_chart.update();
+//     velocity_chart.update();
+//     voltage_chart.update();
+//     current_chart.update();
+//     imu_chart.update();
+//     pwm_chart.update();
+// }
+const sse_client = new EventSource('/sse/');
+
+sse_client.onopen  = function(message_event) {
+  console.log('opened')
 }
+//console.log(sse_client)
+
+sse_client.onmessage =  (e) => {
+  var djangoData = JSON.parse(e.data);
+  var keys = Object.keys(djangoData);
+  console.log(keys)
+
+  for (let i = 0; i < keys.length; i++) {
+    var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
+    new_graph_data.shift();
+    new_graph_data.push(djangoData[keys[i]]);
+    cloud_data[keys[i]].variable.data.datasets[0].data = new_graph_data;
+
+    cloud_data[keys[i]].variable.options.scales.y.title.text = cloud_data[keys[i]].y_label;
+    cloud_data[keys[i]].variable.data.datasets[0].label = cloud_data[keys[i]].title;
+  }
+
+  engine_chart.update();
+  velocity_chart.update();
+  voltage_chart.update();
+  current_chart.update();
+  imu_chart.update();
+  pwm_chart.update();
+}
+
