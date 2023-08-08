@@ -2,3 +2,4 @@ channels==4.0.0
 channels-redis==4.1.0
 daphne==4.0.0
 Django==3.2.20
+whitenoise
