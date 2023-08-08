@@ -14,7 +14,7 @@ def home(request):
 def sse(request):
     def event_stream():
         cont = 0
-        while cont == 0:
+        while True:
             # Generar datos para enviar al cliente
             data = {'engine_velocity':randint(-20, 20),
                     'car_velocity':randint(-20, 20),
