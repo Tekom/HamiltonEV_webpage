@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/ad13bbbc-3f5b-48c6-adca-cd6cd85283bc/resourceGroups/HamiltonEV/providers/Microsoft.Web/sites/hamiltonev",
+    "appService.deploySubpath": "."
+}
