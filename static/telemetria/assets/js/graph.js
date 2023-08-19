@@ -11,6 +11,9 @@ var opciones = {
   maintainAspectRatio: false,
   scales: {
     x: {
+
+      type: 'linear',
+      position: 'bottom',
       grid: {
         display: false
       },
@@ -42,7 +45,7 @@ var opciones_copia = {};
 var graph_data = {
     type: 'line',
     data: {
-      labels: ['jan', 'feb', 'mar', 'apr', 'may', 'jun'],
+      labels: [0, 1, 2, 3, 4, 5],
       datasets: [{
         label: '',
         data: [0, 0, 0, 0, 0, 0],
@@ -51,11 +54,31 @@ var graph_data = {
     options: opciones
 };
 
+var graph_imu = {
+  type: 'line',
+  data: {
+    labels: [0, 1, 2, 3, 4, 5],
+    datasets: [{
+      label: 'X',
+      data: [0, 0, 0, 0, 0, 0],
+    },
+    {
+      label: 'Y',
+      data: [0, 0, 0, 0, 0, 0],
+    },
+    { 
+      label: 'Z',
+      data: [0, 0, 0, 0, 0, 0],
+    }]
+  },
+  options: opciones
+};
+
 var graph_data_engine = JSON.parse(JSON.stringify(graph_data));;
 var graph_data_velocity = JSON.parse(JSON.stringify(graph_data));;
 var graph_data_voltage = JSON.parse(JSON.stringify(graph_data));;
 var graph_data_current = JSON.parse(JSON.stringify(graph_data));;
-var graph_data_imu = JSON.parse(JSON.stringify(graph_data));;
+var graph_data_imu = JSON.parse(JSON.stringify(graph_imu));;
 var graph_data_pwm = JSON.parse(JSON.stringify(graph_data));;
 
 var engine_chart = new Chart(engine_velocity, graph_data_engine);
@@ -86,66 +109,85 @@ const cloud_data = {'engine_velocity':{
   'variable': graph_data_current,
 },
 'imu':{
-  'title': 'Giroscopio',
+  'title': 'IMU',
   'y_label': 'Grados [°]',
   'variable': graph_data_imu,
 },
+
 'pwm':{
   'title': 'PWM',
   'y_label': 'Amplitud [V]',
   'variable': graph_data_pwm,
 }}
 
-// var socket = new WebSocket('ws://' + "127.0.0.1:8888" + '/ws/telemetria/');
+function start(opcion) {
 
-// socket.onmessage = function(e) {
-//     var djangoData = JSON.parse(e.data);
-//     var keys = Object.keys(djangoData);
-    
-//     for (let i = 0; i < keys.length; i++) {
-//       var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
-//       new_graph_data.shift();
-//       new_graph_data.push(djangoData[keys[i]]);
-//       cloud_data[keys[i]].variable.data.datasets[0].data = new_graph_data;
-
-//       cloud_data[keys[i]].variable.options.scales.y.title.text = cloud_data[keys[i]].y_label;
-//       cloud_data[keys[i]].variable.data.datasets[0].label = cloud_data[keys[i]].title;
-//     }
-
-//     engine_chart.update();
-//     velocity_chart.update();
-//     voltage_chart.update();
-//     current_chart.update();
-//     imu_chart.update();
-//     pwm_chart.update();
-// }
-const sse_client = new EventSource('/sse/');
-
-sse_client.onopen  = function(message_event) {
-  console.log('opened')
-}
-//console.log(sse_client)
-
-sse_client.onmessage =  (e) => {
-  var djangoData = JSON.parse(e.data);
-  var keys = Object.keys(djangoData);
-  console.log(keys)
-
-  for (let i = 0; i < keys.length; i++) {
-    var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
-    new_graph_data.shift();
-    new_graph_data.push(djangoData[keys[i]]);
-    cloud_data[keys[i]].variable.data.datasets[0].data = new_graph_data;
-
-    cloud_data[keys[i]].variable.options.scales.y.title.text = cloud_data[keys[i]].y_label;
-    cloud_data[keys[i]].variable.data.datasets[0].label = cloud_data[keys[i]].title;
+  if (opcion == 'iniciar'){
+  window.sse_client = new EventSource('/sse/');
+  sse_client.onopen  = function(message_event) {
+    console.log('opened')
   }
+  //console.log(sse_client)
 
-  engine_chart.update();
-  velocity_chart.update();
-  voltage_chart.update();
-  current_chart.update();
-  imu_chart.update();
-  pwm_chart.update();
+  sse_client.onmessage =  (e) => {
+    var djangoData = JSON.parse(e.data);
+    var keys = Object.keys(djangoData);
+    
+
+    for (let i = 0; i < keys.length; i++) {
+
+      if(keys[i] != 'imu'){
+        var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
+
+        new_graph_data.shift();
+        new_graph_data.push(djangoData[keys[i]]);
+        cloud_data[keys[i]].variable.data.datasets[0].data = new_graph_data;
+
+        cloud_data[keys[i]].variable.options.scales.y.title.text = cloud_data[keys[i]].y_label;
+        cloud_data[keys[i]].variable.data.datasets[0].label = cloud_data[keys[i]].title;
+      }
+
+      else{
+        var new_graph_data = cloud_data[keys[i]].variable.data.datasets[0].data;
+        var new_graph_data2 = cloud_data[keys[i]].variable.data.datasets[1].data;
+        var new_graph_data3 = cloud_data[keys[i]].variable.data.datasets[2].data;
+
+        x_imu_val = djangoData[keys[i]].x
+        y_imu_val = djangoData[keys[i]].y
+        z_imu_val = djangoData[keys[i]].z
+
+        new_graph_data.shift();
+        new_graph_data.push(x_imu_val);
+
+        new_graph_data2.shift();
+        new_graph_data2.push(y_imu_val);
+
+        new_graph_data3.shift();
+        new_graph_data3.push(z_imu_val);
+
+        imu_chart.update();
+      }
+    }
+
+    engine_chart.update();
+    velocity_chart.update();
+    voltage_chart.update();
+    current_chart.update();
+    pwm_chart.update();
+
+    window.postMessage({'message': 'Hello, world!'});
+  }
+ }
+
+ else if (opcion == 'cerrar'){
+  window.sse_client.close();
+  //console.log('closed');
+  //location.reload();
+ }
 }
+
+//document.getElementById("startButton").addEventListener("click", start);
+
+
+
 
